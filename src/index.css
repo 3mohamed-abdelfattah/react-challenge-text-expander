@@ -13,3 +13,8 @@ body {
   border-radius: 7px;
   background-color: #f7f7f7;
 }
+
+button {
+  border: none;
+  background-color: transparent;
+}

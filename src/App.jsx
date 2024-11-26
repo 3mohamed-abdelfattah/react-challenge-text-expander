@@ -1,10 +1,13 @@
 import { useState } from "react";
-import "./styles.css";
+import "./index.css";
 
 export default function App() {
   return (
     <div>
-      <TextExpander>
+      <TextExpander
+        collapsedNumWords={5}
+        expandButtonText="Show more"
+      >
         Space travel is the ultimate adventure! Imagine soaring past the stars
         and exploring new worlds. It's the stuff of dreams and science fiction,
         but believe it or not, space travel is a real thing. Humans and robots
@@ -13,7 +16,7 @@ export default function App() {
       </TextExpander>
 
       <TextExpander
-        collapsedNumWords={9}
+        collapsedNumWords={10}
         expandButtonText="Show text"
         collapseButtonText="Collapse text"
         buttonColor="#ff6622"
@@ -25,7 +28,11 @@ export default function App() {
         foot on the moon or when rovers were sent to roam around on Mars.
       </TextExpander>
 
-      <TextExpander expanded={true} className="box">
+      <TextExpander expanded={true} className="box"
+        collapsedNumWords={9}
+        expandButtonText="Show text"
+        collapseButtonText="Show less"
+      >
         Space missions have given us incredible insights into our universe and
         have inspired future generations to keep reaching for the stars. Space
         travel is a pretty cool thing to think about. Who knows what we'll
@@ -35,14 +42,25 @@ export default function App() {
   );
 }
 
-function TextExpander({ children, collapsedNumWords = 5 }) {
-  const [expand, setExpand] = useState(false);
+function TextExpander({ children, collapsedNumWords = 5, expandButtonText = 'Show more', collapseButtonText = 'Show less', buttonColor = '#1616b8', expanded = false }) {
+  const [expand, setExpand] = useState(expanded);
+  const [collapse, setCollapse] = useState(expanded ? 99999 : collapsedNumWords);
+
+  function handleExpand() {
+    if (expand) {
+      setCollapse(collapsedNumWords)
+      setExpand(!expand)
+    } else {
+      setCollapse(99999)
+      setExpand(!expand)
+    }
+  }
 
   return (
     <div>
-      {children.split(" ").slice(0, collapsedNumWords).join(" ")}
-      <button onClick={() => setExpand(!expand)}>
-        {expand ? "less" : "more"}
+      {children.split(" ").slice(0, collapse).join(" ")}
+      <button style={{ color: buttonColor }} onClick={() => handleExpand()}>
+        {expand ? collapseButtonText : `... ${expandButtonText}`}
       </button>
       <span>{expand}</span>
     </div>
